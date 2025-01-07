@@ -203,7 +203,6 @@ router.put('/update/editorTheme', async (req, res) => {
 router.put('/update/profilePicture', async (req, res) => {
   try {
     const { token, newProfilePic } = req.body;
-    git;
 
     const userToUpdate = await User.findOne({ token });
     if (!userToUpdate) throw new Error('Could not find user');
@@ -212,12 +211,15 @@ router.put('/update/profilePicture', async (req, res) => {
       { token },
       { profilePic: newProfilePic }
     );
+    console.log('Update result:', update);
 
-    if (update.modifiedCount !== 1)
-      throw new Error('Could not update user profile picture');
+    if (update.matchedCount !== 1) {
+      throw new Error('No matching user found');
+    }
 
     res.json({ result: true });
   } catch (err) {
+    console.error('Error updating profile picture:', err.message);
     res.json({ result: false, error: err.message });
   }
 });
