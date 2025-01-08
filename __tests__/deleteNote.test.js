@@ -7,7 +7,7 @@ let noteId = '';
 it('POST /', async () => {
   // create new note
   const res = await request(app).post('/notes').send({ token });
-  noteId = res.body.note._id; // // This value will be used for delete test
+  noteId = res.body.note._id;
 
   expect(res.statusCode).toBe(200);
   expect(res.body.result).toBe(true);
