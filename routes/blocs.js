@@ -61,12 +61,11 @@ router.post('/', async (req, res) => {
       res.json({ result: false, error: 'Bloc was not linked to note' });
       return;
     }
-    res.json({ result: true }); // if updated, respond result = true
+    res.json({ result: true, bloc: newBloc }); // if updated, respond result = true
   } catch (err) {
     res.json({ result: false, error: err.message });
   }
 });
-
 
 /* Get all blocs placed after a given position for a given note */
 router.get('/:noteId/:index', async (req, res) => {
@@ -156,7 +155,7 @@ router.delete('/:blocId/:noteId', async (req, res) => {
       // if bloc is deleted, we need to remove it from the note document
       const updatedNote = await Note.updateOne(
         { _id: noteId }, // find related note
-        { $pull: { blocs: blocId } } // Remove the blocI from the blocs array of the Note document
+        { $pull: { blocs: blocId } } // Remove the blocId from the blocs array of the Note document
       );
       if (updatedNote.modifiedCount === 0) {
         res.json({ result: false, error: 'Could not remove bloc from note' });

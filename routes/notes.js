@@ -43,13 +43,13 @@ router.get('/:noteId', async (req, res) => {
       .populate('backwardNotes');
 
     if (!note) throw new Error('Could not get note');
-    res.json({ result: true, note: note });
+    res.json({ result: true, note });
   } catch (err) {
     res.json({ result: false, error: err.message });
   }
 });
 
-/** Create a new note in database */
+/** Create a new note in database */ 
 router.post('/', async (req, res) => {
   const isBodyValid = checkBody(req.body, ['token']);
   if (!isBodyValid) throw new Error('Missing or empty body parameter');
@@ -132,8 +132,7 @@ router.get('/search/:query/:token', async (req, res, next) => {
   }
 
   try {
-    const { token } = req.params;
-    const query = req.params.query;
+    const { token, query } = req.params;
 
     const user = await User.findOne({ token });
 
@@ -166,7 +165,7 @@ router.post('/by/date', async (req, res) => {
     const startOfDay = new Date(date.setHours(0, 0, 0, 0)); // Début de la journée
     const endOfDay = new Date(date.setHours(23, 59, 59, 999)); // Fin de la journée
 
-    const { token } = req.body;
+    const token = req.body.token;
     const user = await User.findOne({ token });
     if (!user) {
       return res.json({ result: false, error: 'User not found' });
@@ -308,7 +307,7 @@ router.put('/linked', async (req, res) => {
         { $push: { forwardNotes: req.body.refNoteId } }
       );
 
-      if (!note.backwardNotes.includes(req.body.currentNoteI)) {
+      if (!note.backwardNotes.includes(req.body.currentNoteId)) {
         // update backward referenced note
         const updatebackwardNote = await Note.updateOne(
           { _id: req.body.refNoteId },

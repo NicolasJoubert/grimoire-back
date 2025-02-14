@@ -32,7 +32,7 @@ router.post('/signup', (req, res) => {
         const newUser = new User({
           username: name,
           email: email,
-          profilePic: picture || '/images/HatSorcerer.png',
+          profilePic: picture || '/images/avatars/HatSorcerer.png',
           token: uid2(32),
           defaultDevLang: null,
           defaultEditorTheme: null,
@@ -65,11 +65,10 @@ router.post('/signup', (req, res) => {
           email: req.body.email,
           password: hash,
           token: uid2(32),
-          profilePic: req.body.profilePic || '/images/HatSorcerer.png',
+          profilePic: req.body.profilePic || '/images/avatars/HatSorcerer.png',
           defaultDevLang: null,
           defaultEditorTheme: null,
           isDark: false,
-          //devLang: 'dev_1',
         });
 
         newUser.save().then((data) => {
@@ -151,7 +150,7 @@ router.put('/update/username', async (req, res) => {
 /** Change user default language in DB */
 router.put('/update/devlang', async (req, res) => {
   try {
-    const { token, username, profilPic, defaultDevLang, defaultEditorTheme } =
+    const { token, defaultDevLang } =
       req.body;
 
     const devLang = await DevLang.findOne({ displayValue: defaultDevLang });
@@ -203,7 +202,6 @@ router.put('/update/editorTheme', async (req, res) => {
 router.put('/update/profilePicture', async (req, res) => {
   try {
     const { token, newProfilePic } = req.body;
-    git;
 
     const userToUpdate = await User.findOne({ token });
     if (!userToUpdate) throw new Error('Could not find user');

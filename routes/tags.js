@@ -5,7 +5,6 @@ const { ObjectId } = require('mongoose').Types;
 const { checkBody } = require('../modules/checkBody');
 const Tag = require('../models/tags');
 const User = require('../models/users');
-const Note = require('../models/notes');
 
 router.post('/', async (req, res) => {
   // check if body is correct
@@ -93,7 +92,7 @@ router.get('/:noteId', async (req, res) => {
       },
     ]);
 
-    res.json({ tags: foundTags });
+    res.json({ result: true, tags: foundTags });
   } catch (error) {
     return res.json({ result: false, error: error.message });
   }
